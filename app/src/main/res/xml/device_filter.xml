@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<usb-device />
+     <!--<usb-device vendor-id="4611" product-id="0017" />-->
+     <!--<usb-device vendor-id="4611" product-id="0032" />-->
+     <!--<usb-device vendor-id="4611" product-id="0018" />-->
+     <!--<usb-device vendor-id="4611" product-id="0368" />-->
+     <!--<usb-device vendor-id="4611" product-id="0369" />-->
+	<!--<usb-device vendor-id="4611" product-id="0544" />-->
+	<!--<usb-device vendor-id="4611" product-id="0545" />-->
+	<!--<usb-device vendor-id="4611" product-id="0546" />-->
+	<!--<usb-device vendor-id="4611" product-id="0373" />-->
+	<!--<usb-device vendor-id="4611" product-id="0374" />-->
+	<!--<usb-device vendor-id="4611" product-id="0352" />-->
+	<!--<usb-device vendor-id="4611" product-id="0298" />-->
+	<!--<usb-device vendor-id="4611" product-id="0289" />-->
+	<!--<usb-device vendor-id="4611" product-id="0257" />-->
+	<!--<usb-device vendor-id="4611" product-id="0296" />-->
+	<!--<usb-device vendor-id="4611" product-id="0345" />-->
+	<!--<usb-device vendor-id="4611" product-id="0297" />-->
+	<!--<usb-device vendor-id="4611" product-id="0353" />-->
+	<!--<usb-device vendor-id="4611" product-id="0304" />-->
+	<!--<usb-device vendor-id="4611" product-id="0323" />-->
+	<!--<usb-device vendor-id="4611" product-id="0288" />-->
+	<!--<usb-device vendor-id="4611" product-id="0308" />-->
+	<!--<usb-device vendor-id="4611" product-id="0307" />-->
+	<!--<usb-device vendor-id="4611" product-id="0320" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0288" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0338" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0294" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0343" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0584" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0354" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0309" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0305" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0322" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0292" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0339" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0295" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0337" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0580" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0577" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0344" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0583" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0342" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0585" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0340" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0581" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0578" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0336" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0579" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0576" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0582" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0313" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0560" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0561" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0562" />	-->
+	<!---->
+	<!--<usb-device vendor-id="4611" product-id="0310" />	-->
+	<!--<usb-device vendor-id="4611" product-id="0592" />	-->
+ </resources>
