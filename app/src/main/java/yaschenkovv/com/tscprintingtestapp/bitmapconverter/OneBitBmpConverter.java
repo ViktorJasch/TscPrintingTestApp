@@ -15,11 +15,11 @@ public class OneBitBmpConverter implements BitmapConverter{
     public byte[] convert(Bitmap inputBitmap, int factor) {
 		int bitmapWidth = inputBitmap.getWidth();
 		int bitmapHeight = inputBitmap.getHeight();
-		Log.d(TAG, "Width is " + bitmapWidth + "\nHeight is " + bitmapHeight);
+		//Log.d(TAG, "Width is " + bitmapWidth + "\nHeight is " + bitmapHeight);
 		mWidth = ((bitmapWidth +31)/32)*4*8 + 32 * factor;
-		Log.d(TAG, "Recalculated width = " + mWidth);
+		//Log.d(TAG, "Recalculated width = " + mWidth);
 		mSize = mWidth * bitmapHeight;
-		Log.d(TAG, "Начали конвертировать файл в потоке " + Thread.currentThread().getName());
+		//Log.d(TAG, "Начали конвертировать файл в потоке " + Thread.currentThread().getName());
 		byte[] monochrome = convertArgbToGrayScale(inputBitmap);
 		return monochrome;
 		//return createRawMonochromeData(monochrome);
@@ -30,12 +30,10 @@ public class OneBitBmpConverter implements BitmapConverter{
 		int height = bitmap.getHeight();
 
 		int bytesInRow = bitmap.getRowBytes();
-		Log.d(TAG, "byte in row = " + bytesInRow);
 		int size = bytesInRow * height;
 		ByteBuffer byteBuffer = ByteBuffer.allocate(size);
 		bitmap.copyPixelsToBuffer(byteBuffer);
 		byte[] byteArray = byteBuffer.array();
-		Log.d(TAG, "byteArray size = " + byteArray.length);
 		byte[] outputData = new byte[mSize];
 
 		boolean isPremultiplied = bitmap.isPremultiplied();
@@ -71,7 +69,7 @@ public class OneBitBmpConverter implements BitmapConverter{
 				outputData[k] = 1;
 			}
 		}
-		Log.d(TAG, "Output data size = " + outputData.length);
+		//Log.d(TAG, "Output data size = " + outputData.length);
         return outputData;
     }
     

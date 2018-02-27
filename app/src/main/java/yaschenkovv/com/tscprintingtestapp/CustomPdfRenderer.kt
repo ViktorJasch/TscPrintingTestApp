@@ -60,19 +60,12 @@ class CustomPdfRenderer {
                 .flatMap { it.toObservable() }
                 .flatMap {
                     Observable.just(it)
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .map {
-                                Log.d(TAG, "Thread is ${Thread.currentThread()}")
-                                imageView.setImageBitmap(it.bitmap)
-                                it
-                            }
                             .subscribeOn(_scheduler)
                             .map {
-                                //val smallImage = OneBitBmpConverter().convert(it.bitmap)
-                                val smallImage =  rescaler.rescaleDown(2, OneBitBmpConverter().convert(it.bitmap, 0), BmpSizeConstant.HEIGHT * 2)
-                                saveImage("${it.fileName}", smallImage, BmpSizeConstant.WIDTH, BmpSizeConstant.HEIGHT)
-                                smallImage
-                                //rescaler.rescaleUp(3, smallImage, 70)
+                                //Log.d(TAG, "Thread is ${Thread.currentThread()}")
+                                val image = rescaler.rescaleDown(2, OneBitBmpConverter().convert(it.bitmap, 0), BmpSizeConstant.HEIGHT * 2)
+                                //saveImage(it.fileName, image, BmpSizeConstant.WIDTH, BmpSizeConstant.HEIGHT)
+                                image
                             }
                 }
     }
@@ -92,10 +85,9 @@ class CustomPdfRenderer {
             Observable.create<ArrayList<CheckList>>{ source ->
                 Log.d(TAG, "filePath is ${file.absolutePath}")
                 val pdfRenderer = PdfRenderer(getFileDescriptor(file))
-                Log.d(TAG, "should scale for printing = ${pdfRenderer.shouldScaleForPrinting()}")
                 pdfRenderer.use {
                     val checkList = ArrayList<CheckList>(280)
-                    for (i in 0..4) {
+                    for (i in 0..81) {
                         checkList.add(createCheckList(it.openPage(i), "${i}_${file.absolutePath.toString().substringAfterLast("/")}"))
                     }
                     source.onNext(checkList)
@@ -106,6 +98,7 @@ class CustomPdfRenderer {
 
     private fun renderPdfPage(page: Page): Bitmap {
         val bitmap = Bitmap.createBitmap(BmpSizeConstant.WIDTH * 2, BmpSizeConstant.HEIGHT * 2, Bitmap.Config.ARGB_8888)
+        Log.d(TAG, "Bitmap size is ${bitmap.byteCount}")
         page.render(bitmap, null, null, Page.RENDER_MODE_FOR_PRINT)
         page.close()
         return bitmap
@@ -114,7 +107,7 @@ class CustomPdfRenderer {
     private fun initExecutorService() {
         val threadCt = Runtime.getRuntime().availableProcessors() / 2 + 1
         Log.d(TAG, "available processor count = " + threadCt)
-        _executor = Executors.newFixedThreadPool(1)
+        _executor = Executors.newFixedThreadPool(threadCt)
         _scheduler = Schedulers.from(_executor)
     }
 

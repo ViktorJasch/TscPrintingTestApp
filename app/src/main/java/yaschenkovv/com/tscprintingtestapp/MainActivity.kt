@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         convertButton!!.setOnClickListener { convertPdf(pdfRoot) }
 
         printBitmapBtn!!.setOnClickListener {//if (mUsbManager!!.hasPermission(device))
+            Log.d(TAG, "Отправка на печать")
             printByteArrayBitmap(pdfRoot)
         }
 
@@ -145,7 +146,8 @@ class MainActivity : AppCompatActivity() {
         var file = File(filePath)
         renderer.getByteArrayFromPdf(file, checkIv)
                 .flatMapCompletable { tscBitmapPrinting(it) }
-                .subscribe { Log.d(TAG, "end printing") }
+                .doOnComplete { Log.d(TAG, "end printing") }
+                .subscribe()
     }
 
     private fun tscBitmapPrinting(byteArray: ByteArray) = Completable.create {
