@@ -93,8 +93,6 @@ class MainActivity : AppCompatActivity() {
                 Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_ONE_SHOT)
         //mUsbManager!!.requestPermission(device, mPermissionIntent)
 
-        convertButton!!.setOnClickListener { convertPdf(pdfRoot) }
-
         printBitmapBtn!!.setOnClickListener {//if (mUsbManager!!.hasPermission(device))
             Log.d(TAG, "Отправка на печать")
             printByteArrayBitmap(pdfRoot)
@@ -134,28 +132,38 @@ class MainActivity : AppCompatActivity() {
             throw IllegalArgumentException("Only pdf files can be used")
         }
         var file = File(filePath)
-        renderer.getByteArrayFromPdf(file, checkIv)
-                .flatMapCompletable { tscBitmapPrinting(it) }
-                .subscribe { Log.d(TAG, "end printing") }
+        //preparePrinter()
+        renderer.getByteArrayFromPdf(file)
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable { checkListByteArray -> Completable.create {
+                    //Log.d(TAG,"Obtained element")
+                    bitmapCommand(checkListByteArray)
+                    it.onComplete()
+                } }
+                .subscribe {
+                    Log.d(TAG, "Данные закончились")
+                    //TscUSB.closeport()
+                }
     }
 
-    private fun printBmp(filePath: String) {
+    private fun printByteArrayListBitmap(filePath: String) {
         if (!filePath.endsWith(".pdf")){
             throw IllegalArgumentException("Only pdf files can be used")
         }
         var file = File(filePath)
-        renderer.getByteArrayFromPdf(file, checkIv)
-                .flatMapCompletable { tscBitmapPrinting(it) }
-                .doOnComplete { Log.d(TAG, "end printing") }
-                .subscribe()
-    }
-
-    private fun tscBitmapPrinting(byteArray: ByteArray) = Completable.create {
-        Log.d(TAG, "printing the byteArray with size: " + byteArray.size)
-//        preparePrinter()
-//        bitmapCommand(byteArray)
-//        TscUSB.closeport()
-        it.onComplete()
+        //preparePrinter()
+        renderer.getArrayOfPrintableImage(file)
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable { labels -> Completable.create {
+                    for(label in labels) {
+                        //bitmapCommand(label)
+                    }
+                    it.onComplete()
+                } }
+                .subscribe {
+                    Log.d(TAG, "Данные закончились")
+                    //TscUSB.closeport()
+                }
     }
 
     private fun preparePrinter() {
@@ -166,29 +174,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bitmapCommand(byteArray: ByteArray) {
-        val string = " 00 " +
-                "00 00 00 00 00 07 FF 03 FF 11 " +
-                "FF 18 FF 1C 7F 1E 3F 1F 1F 1F " +
-                "8F 1F C7 1F E3 1F E7 1F FF 1F " +
-                "FF"
-        val bytes= string.hexStringToByteArray()
-        sendMessage("CLS\n\r".toByteArray())
-        sendMessage("BITMAP 0,0,44,210,0,".toByteArray())
-        sendMessage(byteArray)
-        sendMessage(TscCommands.POSTFIX.toByteArray())
-//        sendMessage("ERASE 0,125,360,50\n\r".toByteArray())
-//        sendMessage("BARCODE 15,125,\"128\",45,0,0,2,2,\"108416190017999_\"\n\r".toByteArray())
-        sendMessage("PRINT 1,1\n\r".toByteArray())
-    }
-
-    private fun convertPdf(filePath: String) {
-        if (!filePath.endsWith(".pdf")){
-            throw IllegalArgumentException("Only pdf files can be used")
-        }
-        var file = File(filePath)
-        renderer.convertPdfToBitmap(file)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Toast.makeText(this, "Все сконвертнулось", Toast.LENGTH_SHORT).show() }
+        //Log.d(TAG, "printing byteArray")
+//        sendMessage("CLS\n\r".toByteArray())
+//        sendMessage("BITMAP 0,0,44,210,0,".toByteArray())
+//        sendMessage(byteArray)
+//        sendMessage(TscCommands.POSTFIX.toByteArray())
+//        sendMessage("PRINT 1,1\n\r".toByteArray())
     }
 
     private fun tscPrintBmpLabel(file: String){

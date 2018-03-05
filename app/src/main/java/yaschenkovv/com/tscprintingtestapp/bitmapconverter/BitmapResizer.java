@@ -1,15 +1,10 @@
 package yaschenkovv.com.tscprintingtestapp.bitmapconverter;
 
-import android.util.Log;
-
 /**
  * Created by Yaschenko.VV on 16.02.2018.
  */
 
-public class BitmapRescaler {
-    private static final String TAG = "Rescaler";
-    byte[] outputBytes;
-
+public class BitmapResizer {
     public byte[] rescaleDown(int rescaleFactor, byte[] inputBytes, int rowCount) {
         // outputBytes = new byte[inputBytes.length * rescaleFactor * rescaleFactor];
         //showMinBar(inputBytes, rowCount);
@@ -18,13 +13,13 @@ public class BitmapRescaler {
                     "rescaleFactor^2 = " + rescaleFactor*rescaleFactor + "\n" +
                     "inputBytes.length = " + inputBytes.length);
         }
-        outputBytes = new byte[inputBytes.length / (rescaleFactor*rescaleFactor)];
-        nearNeighborRescale(rescaleFactor, inputBytes, rowCount);
+        byte[] outputBytes = nearNeighborRescale(rescaleFactor, inputBytes, rowCount);
         return createRawMonochromeData(outputBytes);
     }
 
-    private void nearNeighborRescale(int rescaleFactor, byte[] inputData, int rowCount) {
+    private byte[] nearNeighborRescale(int rescaleFactor, byte[] inputData, int rowCount) {
         checkRowCountValid(inputData, rowCount);
+        byte[] outputBytes = new byte[inputData.length / (rescaleFactor*rescaleFactor)];
         int byteInInputRow = inputData.length / rowCount;
         int outIndex = 0;
         for(int y = 0; y < rowCount; y += rescaleFactor) {
@@ -33,10 +28,10 @@ public class BitmapRescaler {
                 outputBytes[outIndex++] = pixel;
             }
         }
+        return outputBytes;
     }
 
     private void checkRowCountValid(byte[] inputData, int rowCount) {
-        Log.d(TAG, "Size of input byte = " + inputData.length);
         if(inputData.length % rowCount != 0) {
             throw new IllegalArgumentException("rowCount должно быть кратно inputData.length.\n" +
                     "rowCount = " + rowCount + "\n" +

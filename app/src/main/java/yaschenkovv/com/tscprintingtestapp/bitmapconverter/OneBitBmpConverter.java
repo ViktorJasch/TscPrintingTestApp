@@ -6,26 +6,22 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 
 public class OneBitBmpConverter implements BitmapConverter{
-
-	private int mWidth;
-	private int mSize;
 	private static final String TAG = "BitmapConverter";
-
 
     public byte[] convert(Bitmap inputBitmap, int factor) {
 		int bitmapWidth = inputBitmap.getWidth();
 		int bitmapHeight = inputBitmap.getHeight();
 		//Log.d(TAG, "Width is " + bitmapWidth + "\nHeight is " + bitmapHeight);
-		mWidth = ((bitmapWidth +31)/32)*4*8 + 32 * factor;
+		int width = ((bitmapWidth +31)/32)*4*8 + 32 * factor;
 		//Log.d(TAG, "Recalculated width = " + mWidth);
-		mSize = mWidth * bitmapHeight;
+		int size = width * bitmapHeight;
 		//Log.d(TAG, "Начали конвертировать файл в потоке " + Thread.currentThread().getName());
-		byte[] monochrome = convertArgbToGrayScale(inputBitmap);
+		byte[] monochrome = convertArgbToGrayScale(inputBitmap, width, size);
 		return monochrome;
 		//return createRawMonochromeData(monochrome);
 	}
 
-	private byte[] convertArgbToGrayScale(Bitmap bitmap) {
+	private byte[] convertArgbToGrayScale(Bitmap bitmap, int outputWidth, int outputSize) {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 
@@ -34,7 +30,7 @@ public class OneBitBmpConverter implements BitmapConverter{
 		ByteBuffer byteBuffer = ByteBuffer.allocate(size);
 		bitmap.copyPixelsToBuffer(byteBuffer);
 		byte[] byteArray = byteBuffer.array();
-		byte[] outputData = new byte[mSize];
+		byte[] outputData = new byte[outputSize];
 
 		boolean isPremultiplied = bitmap.isPremultiplied();
 
@@ -45,7 +41,7 @@ public class OneBitBmpConverter implements BitmapConverter{
 		int i;
     	for(i = 0; i < byteArray.length; i += 4) {
 			if (i > 0 && i % bytesInRow == 0) {
-				for(int j = width; j < mWidth; j++, k++){
+				for(int j = width; j < outputWidth; j++, k++){
 					outputData[k] = WHITE;
 				}
 			}
@@ -65,26 +61,26 @@ public class OneBitBmpConverter implements BitmapConverter{
 			k++;
 		}
 		if (i > 0 && i % bytesInRow == 0) {
-			for(int j = width; j < mWidth; j++, k++){
+			for(int j = width; j < outputWidth; j++, k++){
 				outputData[k] = 1;
 			}
 		}
 		//Log.d(TAG, "Output data size = " + outputData.length);
         return outputData;
     }
-    
-    private byte[] createRawMonochromeData(byte[] inputData){
-    	int length = 0;
-		byte[] outputData = new byte[mSize / 8];
-    	for (int i = 0; i < inputData.length; i = i + 8) {
-			byte first = inputData[i];
-			for (int j = 0; j < 7; j++) {
-				byte second = (byte) ((first << 1) | inputData[i + j]);
-				first = second;
-			}
-			outputData[length] = first;
-			length++;
-		}
-		return outputData;
-    }
+
+//    private byte[] createRawMonochromeData(byte[] inputData){
+//    	int length = 0;
+//		byte[] outputData = new byte[mSize / 8];
+//    	for (int i = 0; i < inputData.length; i = i + 8) {
+//			byte first = inputData[i];
+//			for (int j = 0; j < 7; j++) {
+//				byte second = (byte) ((first << 1) | inputData[i + j]);
+//				first = second;
+//			}
+//			outputData[length] = first;
+//			length++;
+//		}
+//		return outputData;
+//    }
 }
